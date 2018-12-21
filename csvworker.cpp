@@ -42,7 +42,7 @@ void CsvWorker::parseData(std::deque<std::string> &readed_data)
 				cur_field[cur_field_size] = c;
 				cur_field_size++;
 			}
-			else { 
+			else {
 				// new field
 				if (cur_field_size > 0) {
 					rw->emplace_back(cur_field, cur_field_size);
@@ -75,14 +75,14 @@ void CsvWorker::loadFile(std::string filename, std::deque<std::string> &readed_d
 	// File to read
 	FILE *fin;
 	char buffer[BLOCK_SIZE];
-	int ok = fopen_s(&fin, filename.c_str(), "rb");
-	if (!ok) {
+	fin = fopen(filename.c_str(), "rb");
+	if (fin) {
 		// The end of the file
-		_fseeki64(fin, 0, SEEK_END);
+		fseek(fin, 0, SEEK_END);
 		// Get size of the file
-		long long m_file_size = _ftelli64(fin);
+		long long m_file_size = ftell(fin);
 		// Go to start
-		_fseeki64(fin, 0, SEEK_SET);
+		fseek(fin, 0, SEEK_SET);
 		// Read and write by "BLOCK_SIZE" bytes
 		int blocks_count = m_file_size / BLOCK_SIZE;
 		for (size_t i = 0; i <= blocks_count; ++i) {
@@ -123,7 +123,7 @@ void CsvWorker::saveToFile(std::string filename)
     // write "data" in file
     for(unsigned int i = 0; i < this->rows_count; ++i)
     {
-        row & rw = data[i]; // create reference to part of data 
+        row & rw = data[i]; // create reference to part of data
         unsigned int delimiters_count = this->cols_count - 1; // count of delimiters
         // write row in file
         for(unsigned int j = 0; j < this->cols_count; ++j)
